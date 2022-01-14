@@ -1,9 +1,8 @@
 spring.data.mongodb:
-  database: Shoppinglist
-  host: localhost
-  port: 27017
+  uri: process.env.MONGODB_URI;
 
 server:
-  port: 3030
+  port: 8080
 
 url: /api/shop
+
