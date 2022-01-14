@@ -1,0 +1,34 @@
+@import "../Components/Einkaufskarte.scss";
+@import "../Components/Shoppinglist";
+.navigationbar {
+    @include flex-contcolumn;
+    margin: 20px;
+}
+
+.link {
+    margin: 15px;
+    color: $color;
+}
+
+.navkomp {
+    margin: 5px;
+    button {
+        border: outset $bordercolor;
+        color: $backgroundcolor;
+
+        #darker {
+        @include darken;
+        }
+        #lighter {
+            @include lighten;
+        }
+        #darkmode{
+            @include colormode("dark");
+        }
+        #lightmode{
+            @include colormode("light");
+        }
+
+    }
+
+}

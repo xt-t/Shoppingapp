@@ -1,0 +1,9 @@
+spring.data.mongodb:
+  database: Shoppinglist
+  host: localhost
+  port: 27017
+
+server:
+  port: 3030
+
+url: /api/shop

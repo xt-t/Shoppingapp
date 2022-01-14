@@ -1,0 +1,41 @@
+@import "./Einkaufskarte.scss";
+
+@mixin flex-contcolumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input {
+  @include flex-contcolumn;
+  .formular {
+    @include flex-contcolumn;
+    margin: 30px;
+    padding: 5px;
+    gap: 0.5rem;
+
+    .textfeld {
+      background-color: $color;
+      min-width: 160px;
+    }
+
+    .button {
+      border: outset $bordercolor;
+      color: $backgroundcolor;
+    }
+
+  }
+
+  .shoppinglist {
+    @include flex-contcolumn;
+  }
+
+  .total {
+    margin: 15px;
+  }
+
+  .removeAll {
+    border: outset $bordercolor;
+    color: $backgroundcolor;
+  }
+}

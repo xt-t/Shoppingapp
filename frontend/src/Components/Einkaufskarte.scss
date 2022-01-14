@@ -1,0 +1,84 @@
+$color: hsl(0, 0%, 86%);
+$bordercolor: 	hsl(210, 13%, 50%);
+$backgroundcolor: hsl(232, 66%, 23%);
+
+@mixin colormode ($mode) {
+@if $mode=="dark" {
+    $backgroundcolor: hsl(232, 66%, 23%);
+}
+    @else {
+    $backgroundcolor: hsl(210, 13%, 50%);
+}
+}
+
+@mixin lighten {
+    background: lighten($backgroundcolor, 25%);
+}
+
+@mixin darken {
+    background: darken($backgroundcolor, 25%);
+}
+
+@mixin flex-cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@mixin flex-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.shoppingcard {
+    @include flex-cont;
+    color: $color;
+    min-width: 15rem;
+    border: 2px outset $bordercolor;
+    margin: 2px;
+
+    .item-name {
+        @include flex-item;
+        margin-left: 5px;
+        justify-content: flex-start;
+        align-content: center;
+        min-width: 200px;
+        cursor: pointer;
+        color: $color;
+
+        span {
+            margin-left: 8px;
+            font-size: 15px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+    }
+
+    .quantity {
+        @include flex-item;
+        color: $color;
+        min-width: 160px;
+        font-size: 14px;
+
+        .crease {
+            border:none;
+            color: $color;
+            background-color: $backgroundcolor;
+            font-size: 14px;
+        }
+
+        span {
+            min-width: 18px;
+        }
+        .remove {
+            border:none;
+            color: $color;
+            background-color: $backgroundcolor;
+            font-size: 15px;
+        }
+    }
+
+}
