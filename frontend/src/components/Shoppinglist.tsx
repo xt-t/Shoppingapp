@@ -16,28 +16,24 @@ export default function Shoppinglist() {
     // const [products, setProducts] = useState<Shoppingitem[]>([]);
     const [textfield, setTextfield] = useState("");
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const addProduct = (event: FormEvent<HTMLFormElement>) => {
         const newProduct = {
             name: textfield,
             id: uuidv4(),
             quantity: 1,
             isSelected: false,
         }
-        if (textfield==="") {
-            event.preventDefault();
-        }
-        else {
+        if (textfield!=="") {
             const findProductByName: Shoppingitem | undefined = products.find(findProduct => findProduct.name === textfield)
-            if (typeof findProductByName ==="object") {
+            if (typeof findProductByName === "object") {
                 quantityIncrease(findProductByName.id);
-            }
-            else {
+            } else {
                 setProducts([...products, newProduct]);
                 // setProducts([...products,event.target.elements[0].value]);
             }
+        }
             event.preventDefault();
             setTextfield("");
-        }
     };
 
     const quantityIncrease = (id: string) => {
@@ -66,7 +62,7 @@ export default function Shoppinglist() {
         }
     }
 
-    const toggleComplete = (id: string) => {
+    const checkSelected = (id: string) => {
         const newProducts = [...products];
         const findProductById: number | undefined = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
@@ -85,7 +81,7 @@ export default function Shoppinglist() {
 
     return (
         <div className="input">
-            <form onSubmit={handleSubmit} className="formular">
+            <form onSubmit={addProduct} className="formular">
                 <input type="text"
                        placeholder="Produkt hinzufügen"
                        value={textfield}
@@ -100,7 +96,7 @@ export default function Shoppinglist() {
                         product={product}
                         quantityDecrease={quantityDecrease}
                         quantityIncrease={quantityIncrease}
-                        toggleComplete={toggleComplete}
+                        checkSelected={checkSelected}
                         remove={remove}
                     />
                 ))}

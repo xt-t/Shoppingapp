@@ -11,31 +11,36 @@ import java.util.Optional;
 public class ShoppinglistService {
 
     private final Shoppinglist listService;
-    private final IdService idService;
 
-    public ShoppinglistService(Shoppinglist list, IdService id) {
+    public ShoppinglistService(Shoppinglist list) {
         listService = list;
-        idService = id;
     }
 
     public List<Shoppinglistitem> allProducts() {
         return listService.findAll();
     }
 
-//    public Shoppinglistitem addProduct(Shoppinglistitem item) {
-//        item.setId(idService.generateId());
-//        return listService.addProduct(item);
-//    }
-//
-//    public Optional<Shoppinglistitem> findShoppinglistitemById(String id) {return listService.findById(id);}
-//
-//    public Optional<Shoppinglistitem> updateProduct(Shoppinglistitem item) {
-//        if (findShoppinglistitemById(item.getId()).isEmpty()) {
-//            return Optional.empty();
-//        }
-//        return Optional.of(listService.changeProduct(item.getId(), item));
-//    }
-//
-//    public Optional<Shoppinglistitem> removeToDoById(String id) {return listService.deleteShoppinglistitemById(id);}
+    public Optional<Shoppinglistitem> removeProductById(String id) {
+        if (listService.existsById(id)) {
+            listService.deleteById(id);
+            return findProductById(id);
+        }
+        else {return Optional.empty();}
+    }
 
+    public List<Shoppinglistitem> removeAllProducts() {
+        listService.deleteAll();
+        return listService.findAll();
+    }
+
+    public Shoppinglistitem postProduct(Shoppinglistitem product) {
+        return listService.save(product);
+    }
+
+    public Optional<Shoppinglistitem> findProductById(String id) {return listService.findById(id);}
+
+    public Optional<Shoppinglistitem> updateProduct(Shoppinglistitem product) {
+        listService.save(product);
+        return listService.findById(product.getId());
+    }
 }

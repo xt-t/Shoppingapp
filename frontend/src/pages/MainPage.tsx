@@ -1,6 +1,6 @@
 import "./MainPage.scss"
-import NavigationBar from "../Components/NavigationBar";
-import Shoppinglist from "../Components/Shoppinglist";
+import NavigationBar from "../components/NavigationBar";
+import Shoppinglist from "../components/Shoppinglist";
 
 export default function MainPage() {
     return (

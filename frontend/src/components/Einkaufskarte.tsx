@@ -8,14 +8,14 @@ interface propssetup{
     product: Shoppingitem,
     quantityDecrease:Function,
     quantityIncrease:Function,
-    toggleComplete:Function
+    checkSelected:Function
     remove: Function
 }
 
-export default function Einkaufskarte({product, quantityDecrease, quantityIncrease, toggleComplete, remove}:propssetup) {
+export default function Einkaufskarte({product, quantityDecrease, quantityIncrease, checkSelected, remove}:propssetup) {
     return (
         <div className="shoppingcard">
-            <div className='item-name' onClick={() => toggleComplete(toggleComplete(product.id))}>
+            <div className='item-name' onClick={() => checkSelected(checkSelected(product.id))}>
                 {product.isSelected ? (
                     <>
                         <FontAwesomeIcon icon={faCheckCircle} />

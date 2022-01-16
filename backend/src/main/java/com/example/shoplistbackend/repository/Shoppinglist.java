@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface Shoppinglist extends MongoRepository<Shoppinglistitem, String> {
 
-
 }

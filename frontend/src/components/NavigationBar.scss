@@ -1,5 +1,5 @@
-@import "../Components/Einkaufskarte.scss";
-@import "../Components/Shoppinglist";
+@import "src/components/Einkaufskarte.scss";
+@import "src/components/Shoppinglist";
 .navigationbar {
     @include flex-contcolumn;
     margin: 20px;

@@ -4,5 +4,5 @@ spring.data.mongodb:
 server:
   port: ${PORT:8080}
 
-url: /api/shop
+url: ${URL:/api/shop}
 

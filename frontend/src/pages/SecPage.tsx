@@ -1,5 +1,5 @@
 import "./SecPage.scss"
-import NavigationBar from "../Components/NavigationBar";
+import NavigationBar from "../components/NavigationBar";
 import React from "react";
 
 export default function SecPage() {
