@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Shoppinglist() {
 
