@@ -3,6 +3,9 @@ import React, {FormEvent, useState} from "react";
 import Einkaufskarte from "./Einkaufskarte";
 import {Shoppingitem} from "./Shoppingitem";
 import {v4 as uuidv4} from 'uuid';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 export default function Shoppinglist() {
 
@@ -16,24 +19,28 @@ export default function Shoppinglist() {
     // const [products, setProducts] = useState<Shoppingitem[]>([]);
     const [textfield, setTextfield] = useState("");
 
-    const addProduct = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         const newProduct = {
             name: textfield,
             id: uuidv4(),
             quantity: 1,
             isSelected: false,
         }
-        if (textfield!=="") {
+        if (textfield==="") {
+            event.preventDefault();
+        }
+        else {
             const findProductByName: Shoppingitem | undefined = products.find(findProduct => findProduct.name === textfield)
-            if (typeof findProductByName === "object") {
+            if (typeof findProductByName ==="object") {
                 quantityIncrease(findProductByName.id);
-            } else {
+            }
+            else {
                 setProducts([...products, newProduct]);
                 // setProducts([...products,event.target.elements[0].value]);
             }
-        }
             event.preventDefault();
             setTextfield("");
+        }
     };
 
     const quantityIncrease = (id: string) => {
@@ -62,7 +69,7 @@ export default function Shoppinglist() {
         }
     }
 
-    const checkSelected = (id: string) => {
+    const toggleComplete = (id: string) => {
         const newProducts = [...products];
         const findProductById: number | undefined = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
@@ -81,13 +88,25 @@ export default function Shoppinglist() {
 
     return (
         <div className="input">
-            <form onSubmit={addProduct} className="formular">
-                <input type="text"
-                       placeholder="Produkt hinzufügen"
-                       value={textfield}
-                       onChange={(e) => setTextfield(e.target.value)} className="textfeld"
-                />
-                <input type="submit" value="Submit" className="button"/>
+            <form onSubmit={handleSubmit} className="formular">
+                <Box
+                    component="form"
+                    sx={{
+                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
+                    <TextField
+                        id="outlined-helperText"
+                        label="Produkt hinzufügen"
+                        value={textfield}
+                        onChange={(e) => setTextfield(e.target.value)}
+                    />
+                </Box>
+                <Button variant="contained" color="primary" type="submit" value="Submit">
+                    Submit
+                </Button>
             </form>
             <div className="shoppinglist">
                 {products.map((product, index) => (
@@ -96,13 +115,15 @@ export default function Shoppinglist() {
                         product={product}
                         quantityDecrease={quantityDecrease}
                         quantityIncrease={quantityIncrease}
-                        checkSelected={checkSelected}
+                        toggleComplete={toggleComplete}
                         remove={remove}
                     />
                 ))}
             </div>
             <ProductsTotal totalproducts={products}/>
-            <button onClick={()=>removeAll()} className="removeAll">Remove list</button>
+            <Button variant="outlined" className="delete" onClick={()=>removeAll()} startIcon={<DeleteIcon />}>
+                Remove list
+            </Button>
         </div>
     );
 };
@@ -115,6 +136,6 @@ const ProductsTotal = ({totalproducts}:ProductsTotalProps) => {
     const amountProducts : number = totalproducts.reduce((total, totalproduct) => {
         return total + totalproduct.quantity;
     }, 0)
-        return (
+    return (
         <div className="total">Total: {amountProducts}</div>)
 }

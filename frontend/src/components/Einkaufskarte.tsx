@@ -3,19 +3,22 @@ import "./Shoppinglist"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faChevronLeft, faChevronRight, faCircle} from "@fortawesome/free-solid-svg-icons";
 import {Shoppingitem} from "./Shoppingitem";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface propssetup{
     product: Shoppingitem,
     quantityDecrease:Function,
     quantityIncrease:Function,
-    checkSelected:Function
+    toggleComplete:Function
     remove: Function
 }
 
-export default function Einkaufskarte({product, quantityDecrease, quantityIncrease, checkSelected, remove}:propssetup) {
+export default function Einkaufskarte({product, quantityDecrease, quantityIncrease, toggleComplete, remove}:propssetup) {
     return (
         <div className="shoppingcard">
-            <div className='item-name' onClick={() => checkSelected(checkSelected(product.id))}>
+            <div className='item-name' onClick={() => toggleComplete(toggleComplete(product.id))}>
                 {product.isSelected ? (
                     <>
                         <FontAwesomeIcon icon={faCheckCircle} />
@@ -36,7 +39,9 @@ export default function Einkaufskarte({product, quantityDecrease, quantityIncrea
                 <button className="crease">
                     <FontAwesomeIcon icon={faChevronRight} onClick={() => quantityIncrease(product.id)}/>
                 </button >
-                <button onClick={()=>remove(product.id)} className="remove">Remove</button>
+                <Button onClick={()=>remove(product.id)} startIcon={<DeleteIcon />}>
+                    Delete
+                </Button>
             </div>
         </div>
     )
