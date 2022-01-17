@@ -90,7 +90,7 @@ export default function Shoppinglist() {
         const newProducts = [...products];
         const findProductById: number | undefined = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
-            newProducts[findProductById].isSelected = !newProducts[findProductById].isSelected
+            newProducts[findProductById].isSelected = !newProducts[findProductById].isSelected;
             updateShoppingitem(newProducts[findProductById])
                 .then(() => getAllShoppingitems())
                 .then(items => setProducts(items))
