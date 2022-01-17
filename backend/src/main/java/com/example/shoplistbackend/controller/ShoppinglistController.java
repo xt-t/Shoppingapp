@@ -38,9 +38,8 @@ public class ShoppinglistController {
     }
 
     @DeleteMapping(value="/{id}")
-    public ResponseEntity<Shoppinglistitem> removeShoppingitem (@PathVariable String id) {
-        Optional<Shoppinglistitem> opt = shopservice.removeProductById(id);
-        return ResponseEntity.of(opt);
+    public String removeShoppingitem (@PathVariable String id) {
+        return shopservice.removeProductById(id);
     }
 
     @GetMapping(value="{id}")

@@ -11,21 +11,10 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackageClasses = Shoppinglist.class)
-public class ShoplistbackendApplication implements CommandLineRunner {
+public class ShoplistbackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ShoplistbackendApplication.class, args);
-    }
-
-    @Autowired
-    Shoppinglist repository;
-
-    @Override
-    public void run(String... args) throws Exception {
-        final Shoppinglistitem product = Shoppinglistitem.builder().productname("Brot").build();
-        repository.save(product);
-
-        repository.findAll().stream().forEach(System.out::println);
     }
 }
 
