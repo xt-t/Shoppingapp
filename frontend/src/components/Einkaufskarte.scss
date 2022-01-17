@@ -1,6 +1,6 @@
 $color: hsl(0, 0%, 86%);
 $bordercolor: 	hsl(210, 13%, 50%);
-$backgroundcolor: hsl(232, 66%, 23%);
+$backgroundcolor: hsl(0, 0%, 86%);
 
 @mixin colormode ($mode) {
 @if $mode=="dark" {
