@@ -57,7 +57,10 @@ export default function Shoppinglist() {
         const findProductById: number = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
             newProducts[findProductById].quantity++;
-            updateShoppingitem(newProducts[findProductById]);
+            updateShoppingitem(newProducts[findProductById])
+                .then(() => getAllShoppingitems())
+                .then(items => setProducts(items))
+                .catch(error => console.error(error))
             // setProducts(newProducts);
         } else {
             console.log("Id nicht vorhanden", products, id, findProductById)
