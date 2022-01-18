@@ -22,7 +22,7 @@ public class ShoplistbackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        final Shoppinglistitem product = Shoppinglistitem.builder().productname("Brot").build();
+        final Shoppinglistitem product = Shoppinglistitem.builder().name("Brot").build();
         repository.save(product);
 
         repository.findAll().stream().forEach(System.out::println);
