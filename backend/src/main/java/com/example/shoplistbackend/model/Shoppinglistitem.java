@@ -18,7 +18,7 @@ public class Shoppinglistitem {
     @Id
     private String id;
 
-    private String productname;
+    private String name;
     private int quantity;
     private boolean isSelected;
 

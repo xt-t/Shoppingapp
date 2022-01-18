@@ -20,12 +20,12 @@ public class ShoppinglistService {
         return listService.findAll();
     }
 
-    public Optional<Shoppinglistitem> removeProductById(String id) {
+    public String removeProductById(String id) {
         if (listService.existsById(id)) {
             listService.deleteById(id);
-            return findProductById(id);
+            return "Deleted!";
         }
-        else {return Optional.empty();}
+        else {return "Something went wrong";}
     }
 
     public List<Shoppinglistitem> removeAllProducts() {

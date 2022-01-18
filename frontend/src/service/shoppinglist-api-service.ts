@@ -10,7 +10,7 @@ interface Shoppingitem {
 export const getAllShoppingitems = () =>
     axios.get('/api/shop').then(response => response.data)
 
-export const addShoppingitem = (id:String) => axios.post('/api/shop/')
+export const addShoppingitem = (product:Shoppingitem) => axios.post('/api/shop/', product)
 
 export const deleteWholeList = () => axios.delete('/api/shop/')
 
