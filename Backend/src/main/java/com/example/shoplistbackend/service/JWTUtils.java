@@ -1,4 +1,4 @@
-package com.example.jsonsecurity.service;
+package com.example.shoplistbackend.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Service
 public class JWTUtils {
-
 
     final String secret = "this is a bad secret";
 

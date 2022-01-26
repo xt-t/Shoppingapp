@@ -1,6 +1,6 @@
-package com.example.jsonsecurity.service;
+package com.example.shoplistbackend.service;
 
-import com.example.jsonsecurity.repository.MongoUserRepository;
+import com.example.shoplistbackend.repository.MongoUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

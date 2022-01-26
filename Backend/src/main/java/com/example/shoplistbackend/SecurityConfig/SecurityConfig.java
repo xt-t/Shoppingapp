@@ -1,6 +1,6 @@
-package com.example.jsonsecurity.config;
+package com.example.shoplistbackend.SecurityConfig;
 
-import com.example.jsonsecurity.filter.JwtAuthFilter;
+import com.example.shoplistbackend.filter.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/**").authenticated()
-                .antMatchers("/auth").permitAll()
+                .antMatchers("/**").permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }

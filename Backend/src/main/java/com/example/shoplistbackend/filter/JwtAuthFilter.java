@@ -1,9 +1,8 @@
-package com.example.jsonsecurity.filter;
+package com.example.shoplistbackend.filter;
 
-import com.example.jsonsecurity.service.JWTUtils;
+import com.example.shoplistbackend.service.JWTUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,47 +17,47 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-    @Component
-    public class JwtAuthFilter extends OncePerRequestFilter {
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
 
-        private static final Log LOG = LogFactory.getLog(JwtAuthFilter.class);
+    private static final Log LOG = LogFactory.getLog(JwtAuthFilter.class);
 
-        final JWTUtils jwtUtils;
-        final UserDetailsService userService;
+    final JWTUtils jwtUtils;
+    final UserDetailsService userService;
 
 
-        public JwtAuthFilter(JWTUtils jwtUtils, UserDetailsService userService) {
-            this.jwtUtils = jwtUtils;
-            this.userService = userService;
-        }
+    public JwtAuthFilter(JWTUtils jwtUtils, UserDetailsService userService) {
+        this.jwtUtils = jwtUtils;
+        this.userService = userService;
+    }
 
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            final String token = getToken(request);
-            if (token != null) try {
-                final String username = jwtUtils.extractUserName(token);
-                if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
-                    final UserDetails userDetails = userService.loadUserByUsername(username);
-                    if (jwtUtils.validateToken(token, userDetails.getUsername())) {
-                        final UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                            SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        final String token = getToken(request);
+        if (token != null) try {
+            final String username = jwtUtils.extractUserName(token);
+            if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
+                final UserDetails userDetails = userService.loadUserByUsername(username);
+                if (jwtUtils.validateToken(token, userDetails.getUsername())) {
+                    final UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));  //speichert weitere Details ab
+                        SecurityContextHolder.getContext().setAuthentication(authToken);   //SecurityContextHolder speichert weitere Daten von Token, um z.B. den Principal abrufen zu können
                 }
             }
-            catch (Exception e) {
-                LOG.warn("Error while parsing token", e);
-            }
-                filterChain.doFilter(request, response);
-            }
+        }
+        catch (Exception e) {
+            LOG.warn("Error while parsing token", e);
+        }
+            filterChain.doFilter(request, response);
+        }
 
-            private String getToken(HttpServletRequest request) {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader == null) {
-                return null;
-            } else {
-                return authHeader.replace("Bearer","").trim();
-            }
+        private String getToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null) {
+            return null;
+        } else {
+            return authHeader.replace("Bearer","").trim();
         }
     }
+}

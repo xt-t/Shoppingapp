@@ -20,6 +20,6 @@ public class Shoppinglistitem {
 
     private String name;
     private int quantity;
-    private boolean isSelected;
+    private boolean checked;
 
 }
