@@ -1,7 +1,7 @@
 import "./Shoppinglist.scss"
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useContext, useEffect, useState} from "react";
 import Einkaufskarte from "./Einkaufskarte";
-import {Shoppingitem} from "./Shoppingitem";
+import {Shoppingitem} from "../model/Shoppingitem";
 import {v4 as uuidv4} from 'uuid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -13,6 +13,7 @@ import {
     getAllShoppingitems,
     updateShoppingitem
 } from "../service/shoppinglist-api-service";
+import {AuthContext} from "../context/AuthProvider";
 
 export default function Shoppinglist() {
 
@@ -21,10 +22,10 @@ export default function Shoppinglist() {
     // const [products, setProducts] = useState<Shoppingitem[]>([]);
     const [textfield, setTextfield] = useState("");
 
+    const {token} = useContext(AuthContext);
+
     useEffect(() => {
-        getAllShoppingitems()
-            .then(items => setProducts(items))
-            .catch(error => console.error(error))
+        support()
         localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
     }, [] || [products])
 
@@ -33,18 +34,16 @@ export default function Shoppinglist() {
             name: textfield,
             id: uuidv4(),
             quantity: 1,
-            isSelected: false,
+            checked: false,
         }
-        if (textfield!=="") {
+        if (textfield !== "") {
             const findProductByName: Shoppingitem | undefined = products.find(findProduct => findProduct.name === textfield)
             if (typeof findProductByName === "object") {
                 quantityIncrease(findProductByName.id);
             } else {
                 // setProducts([...products, newProduct]);
-                addShoppingitem(newProduct)
-                    .then(() => getAllShoppingitems())
-                    .then(items => setProducts(items))
-                    .catch(error => console.error(error))
+                addShoppingitem(newProduct, token)
+                    .then(support)
                 // setProducts([...products,event.target.elements[0].value]);
             }
         }
@@ -57,10 +56,8 @@ export default function Shoppinglist() {
         const findProductById: number = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
             newProducts[findProductById].quantity++;
-            updateShoppingitem(newProducts[findProductById])
-                .then(() => getAllShoppingitems())
-                .then(items => setProducts(items))
-                .catch(error => console.error(error))
+            updateShoppingitem(newProducts[findProductById], token)
+                .then(support)
             // setProducts(newProducts);
         } else {
             console.log("Id nicht vorhanden", products, id, findProductById)
@@ -75,10 +72,8 @@ export default function Shoppinglist() {
             if ((newProducts[findProductById].quantity) < 1) {
                 remove(id);
             } else {
-                updateShoppingitem(newProducts[findProductById])
-                    .then(() => getAllShoppingitems())
-                    .then(items => setProducts(items))
-                    .catch(error => console.error(error))
+                updateShoppingitem(newProducts[findProductById], token)
+                    .then(support)
                 // setProducts(newProducts);
             }
         } else {
@@ -90,53 +85,56 @@ export default function Shoppinglist() {
         const newProducts = [...products];
         const findProductById: number | undefined = products.findIndex(findProduct => findProduct.id === id)
         if (findProductById !== -1) {
-            newProducts[findProductById].isSelected = !newProducts[findProductById].isSelected;
-            updateShoppingitem(newProducts[findProductById])
-                .then(() => getAllShoppingitems())
-                .then(items => setProducts(items))
-                .catch(error => console.error(error))
+            newProducts[findProductById].checked = !newProducts[findProductById].checked;
+            updateShoppingitem(newProducts[findProductById], token)
+                .then(support)
             // setProducts(newProducts);
         }
     }
 
     const remove = (id: string) => {
-        deleteShoppingitem(id)
-            .then(() => getAllShoppingitems())
-            .then(items => setProducts(items))
-            .catch(error => console.error(error))
+        deleteShoppingitem(id, token)
+            .then(support)
         // setProducts(products.filter(testRemoveProduct => testRemoveProduct.id !== id))
     }
 
     const removeAll = () => {
-        deleteWholeList()
-            .then(() => getAllShoppingitems())
+        deleteWholeList(token)
+            .then(support)
+        // setProducts([])
+    }
+
+    const support = () => {
+        console.log(token)
+        getAllShoppingitems(token)
             .then(items => setProducts(items))
             .catch(error => console.error(error))
-        // setProducts([])
     }
 
     return (
         <div className="input">
-            <form onSubmit={handleSubmit} className="formular">
-                <Box
-                    component="form"
-                    sx={{
-                        '& .MuiTextField-root': { m: 1, width: '25ch' },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField
-                        id="outlined-helperText"
-                        label="Produkt hinzufügen"
-                        value={textfield}
-                        onChange={(e) => setTextfield(e.target.value)}
-                    />
-                </Box>
-                <Button variant="contained" color="primary" type="submit" value="Submit">
-                    Submit
-                </Button>
-            </form>
+            <div>
+                <form onSubmit={handleSubmit} className="formular">
+                    <Box
+                        component="form"
+                        sx={{
+                            '& .MuiTextField-root': {m: 1, width: '25ch'},
+                        }}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <TextField
+                            id="outlined-helperText"
+                            label="Produkt hinzufügen"
+                            value={textfield}
+                            onChange={(e) => setTextfield(e.target.value)}
+                        />
+                    </Box>
+                    <Button variant="contained" color="primary" type="submit" value="Submit">
+                        Submit
+                    </Button>
+                </form>
+            </div>
             <div className="shoppinglist">
                 {products.map((product, index) => (
                     <Einkaufskarte
@@ -149,10 +147,12 @@ export default function Shoppinglist() {
                     />
                 ))}
             </div>
-            <ProductsTotal totalproducts={products}/>
-            <Button variant="outlined" className="delete" onClick={()=>removeAll()} startIcon={<DeleteIcon />}>
-                Remove list
-            </Button>
+            <div>
+                <ProductsTotal totalproducts={products}/>
+                <Button variant="outlined" className="delete" onClick={() => removeAll()} startIcon={<DeleteIcon/>}>
+                    Remove list
+                </Button>
+            </div>
         </div>
     );
 };
@@ -161,7 +161,7 @@ interface ProductsTotalProps {
     totalproducts: Shoppingitem[]
 }
 
-const ProductsTotal = ({totalproducts}:ProductsTotalProps) => {
+const ProductsTotal = ({totalproducts}: ProductsTotalProps) => {
     const amountProducts: number = totalproducts.reduce((total, totalproduct) => {
         return total + totalproduct.quantity;
     }, 0)

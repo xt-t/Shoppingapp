@@ -2,7 +2,7 @@ import "./Einkaufskarte.scss"
 import "./Shoppinglist"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faChevronLeft, faChevronRight, faCircle} from "@fortawesome/free-solid-svg-icons";
-import {Shoppingitem} from "./Shoppingitem";
+import {Shoppingitem} from "../model/Shoppingitem";
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +19,7 @@ export default function Einkaufskarte({product, quantityDecrease, quantityIncrea
     return (
         <div className="shoppingcard">
             <div className='item-name' onClick={() => toggleComplete(toggleComplete(product.id))}>
-                {product.isSelected ? (
+                {product.checked ? (
                     <>
                         <FontAwesomeIcon icon={faCheckCircle} />
                         <span className='completed'>{product.name}</span>
